@@ -33,6 +33,7 @@ const updateTicket = async (req,res,next) => {
    if(!ticketId) return res.sendStatus(404) ;
    const ticket = await Ticket.findOne({_id : ticketId }).exec() ;
    if(!ticket) return res.sendStatus(409) ;
+   if(ticket.createdBy != req.connected_id) return res.sendStatus(401) ;
     if(description) ticket.description = description ;
     if(priority) ticket.priority = priority ;
     if(taggedUsers) ticket.taggedUsers = taggedUsers ;
@@ -49,6 +50,7 @@ const closeTicket = async (req,res,next) => {
    if(!ticketId) return res.sendStatus(404) ;
    const ticket = await Ticket.findOne({_id : ticketId }).exec() ;
    if(!ticket) return res.sendStatus(409) ;
+   if(ticket.createdBy != req.connected_id) return res.sendStatus(401) ;
    ticket.status = 'closed'
    await ticket.save() ;
    createNotification(req.connected_id,'ticket fermé !',`${user.fullname} a fermé son ticket`,[...ticket.taggedUsers,req.connected_id]) ;
@@ -60,5 +62,21 @@ const closeTicket = async (req,res,next) => {
    }
 }
 
+const getTicketsOfCurrentUser = async (req,res,next) => {
+   try {
+      
+      const tickets = await Ticket.find({createdBy : req.connected_id}).sort({createdAt : -1}).exec() ;
+      if(!tickets) {
+         res.sendStatus(204) ;
+      }
+      else {
+      req.data = tickets ;
+      next() ;
+      }
+   }catch(err) {
+      next(err) ;
+   }
+}
 
-module.exports = {createTicket  ,  updateTicket , closeTicket}
+
+module.exports = {createTicket  ,  updateTicket , closeTicket , getTicketsOfCurrentUser}

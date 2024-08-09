@@ -23,8 +23,10 @@ const getNotificationsByUser = async (req,res,next) => {
      if(!notifications) {
         res.senStatus(204) ;
      }
-     else res.status(200).json({notifications})
-
+     else {
+        req.data = notifications ;
+        next() ;
+     } 
     }catch(err) {
         next(err) ;
     }
