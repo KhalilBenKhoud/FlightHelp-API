@@ -10,8 +10,13 @@ const errorHandler = (err,req,res,next) => {
           }
           return res.status(400).json({message : formatted})
        }
+<<<<<<< HEAD
         console.error(err) ;
       res.status(501).json({message : err.message})  
+=======
+ 
+      res.status(500).json({message : err.message})   
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
 }
 
 module.exports = errorHandler ;

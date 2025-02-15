@@ -39,10 +39,14 @@ const userSchema = new Schema({
         token : String,
         createdAt : Date
     },
+<<<<<<< HEAD
     profileImage : {
         type : String,
         default : ''
     } ,
+=======
+    profileImage : String ,
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
     createdAt : {
         type : Date,
         default : Date.now()

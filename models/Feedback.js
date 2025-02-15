@@ -4,7 +4,11 @@ const Schema = mongoose.Schema ;
 const feedbackSchema = new Schema({
     content : {
         type : String,
+<<<<<<< HEAD
        
+=======
+        required : true 
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
     },
     stars : {
         type : Number,

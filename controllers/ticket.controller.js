@@ -1,17 +1,24 @@
 const Ticket = require('../models/Ticket') ;
 const User = require('../models/User') ;
+<<<<<<< HEAD
 const createNotification = require('../utils/createNotification') ;
 const fsPromises = require('fs').promises ;
 const path = require('path') ;
+=======
+const createNotification = require('../utils/createNotification')
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
 
 const createTicket = async (req,res,next) => {
     try {
       const {title, description , priority , taggedUsers } = req.body ;
+<<<<<<< HEAD
       const file = req.files?.image ;
       const prefix = req.connected_id ;
       const imageName = file ? (prefix + '_' + file?.name) : '' ;
 
 
+=======
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
       if(!title || !description  || !priority) return res.status(400).json({message : 'Veuillez remplir tous les champs !'}) ;
       const createdTicket = await Ticket.create({
           title,
@@ -19,6 +26,7 @@ const createTicket = async (req,res,next) => {
           priority,
           status : 'open',
           createdBy :  req.connected_id,
+<<<<<<< HEAD
           taggedUsers : taggedUsers || [],
           image : imageName
       })
@@ -28,6 +36,14 @@ const createTicket = async (req,res,next) => {
       const user = await User.findOne({_id : req.connected_id }).exec() ;
 
       createNotification(req.connected_id,'ticket crée !',`${user.fullname} a crée un ticket à ${new Date().toLocaleString()}`,[...(taggedUsers || []),req.connected_id]) ;
+=======
+          taggedUsers
+      })
+
+      const user = await User.findOne({_id : req.connected_id }).exec() ;
+
+      createNotification(req.connected_id,'ticket crée !',`${user.fullname} a crée un ticket`,[...taggedUsers,req.connected_id]) ;
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
 
       res.status(201).json({'message' : 'ticket crée avec succès !'}) ;
 
@@ -54,11 +70,15 @@ const updateTicket = async (req,res,next) => {
       next(err) ;
    }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
 const closeTicket = async (req,res,next) => {
    try {
    const ticketId = req.params.id ;
    if(!ticketId) return res.sendStatus(404) ;
+<<<<<<< HEAD
    const ticket = await Ticket.findOne({_id : ticketId }).populate('createdBy').exec() ;
    if(!ticket) return res.sendStatus(409) ;
    if(ticket.createdBy._id != req.connected_id) return res.sendStatus(401) ;
@@ -69,6 +89,14 @@ const closeTicket = async (req,res,next) => {
 
    createNotification(req.connected_id,'ticket fermé !',`${ticket.createdBy?.fullname} a fermé un ticket à ${new Date().toLocaleString()}`,[...(ticket.taggedUsers || []),req.connected_id]) ;
 
+=======
+   const ticket = await Ticket.findOne({_id : ticketId }).exec() ;
+   if(!ticket) return res.sendStatus(409) ;
+   if(ticket.createdBy != req.connected_id) return res.sendStatus(401) ;
+   ticket.status = 'closed'
+   await ticket.save() ;
+   createNotification(req.connected_id,'ticket fermé !',`${user.fullname} a fermé son ticket`,[...ticket.taggedUsers,req.connected_id]) ;
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
 
    res.status(200).json({message : 'ticket fermé !', ticket}) ;
   
@@ -80,6 +108,7 @@ const closeTicket = async (req,res,next) => {
 const getTicketsOfCurrentUser = async (req,res,next) => {
    try {
       
+<<<<<<< HEAD
       const tickets = await Ticket.find({createdBy : req.connected_id}).sort({updatedAt : -1,createdAt : -1}).populate('createdBy','fullname')
       .populate({
          path: 'taggedUsers',
@@ -88,6 +117,11 @@ const getTicketsOfCurrentUser = async (req,res,next) => {
      .exec()  ;
       if(!tickets) {
         return res.sendStatus(204) ;
+=======
+      const tickets = await Ticket.find({createdBy : req.connected_id}).sort({createdAt : -1}).exec() ;
+      if(!tickets) {
+         res.sendStatus(204) ;
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
       }
       else {
       req.data = tickets ;
@@ -98,6 +132,7 @@ const getTicketsOfCurrentUser = async (req,res,next) => {
    }
 }
 
+<<<<<<< HEAD
 const getAllTickets = async (req,res,next) => {
    try {
       
@@ -187,3 +222,7 @@ const getTicket = async (req,res,next) => {
 }
 
 module.exports = {getTicket , searchTickets,  createTicket  ,  updateTicket , closeTicket , getTicketsOfCurrentUser , getAllTickets, searchUsersToTag}
+=======
+
+module.exports = {createTicket  ,  updateTicket , closeTicket , getTicketsOfCurrentUser}
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63

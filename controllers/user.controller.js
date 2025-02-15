@@ -1,29 +1,48 @@
 const User = require('../models/User') ;
+<<<<<<< HEAD
 const Ticket = require('../models/Ticket') ;
+=======
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
 const path = require('path') ;
 const fs = require('fs') ;
 const fsPromises = require('fs').promises ;
 const  {setValue, retriveValue} = require('../config/redisClient')
+<<<<<<< HEAD
 const bcrypt = require('bcrypt')
+=======
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
 
 const getCurrentUser = async (req,res,next) => {
     try {
      const cachedUser = await retriveValue(`user_${req.connected_id}`) ;
+<<<<<<< HEAD
      const openTickets = await Ticket.countDocuments({createdBy : req.connected_id , status : 'open'}).exec();
     if(cachedUser && Object.keys(cachedUser).length > 0) {
          console.log('cached user from redis ') ;
          res.status(200).json({profile : {...cachedUser,openTickets}}) ;
+=======
+    if(Object.keys(cachedUser).length > 0) {
+         console.log('cached user from redis ') ;
+         res.status(200).json({profile : cachedUser}) ;
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
     }
     else {
     const user = await User.findOne({_id : req.connected_id}).exec() ;
     if(!user) res.sendStatus(404) ;
     else {
         await setValue(`user_${req.connected_id}`,user) ;
+<<<<<<< HEAD
         res.status(200).json({profile : {...user,openTickets}}) ;
     }
     }
    }catch(err) {
       console.error(err) ;
+=======
+        res.status(200).json({profile : user}) ;
+    }
+    }
+   }catch(err) {
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
       next(err) ;
    }
 }
@@ -57,6 +76,7 @@ const retrieveProfileImage = async (req,res,next) => {
     
     const user = await User.findOne({_id : req.connected_id}).exec() ;
     if(!user) return res.sendStatus(400) ;
+<<<<<<< HEAD
     if(!user.profileImage) return res.sendStatus(204) ;
 
     const image = await fsPromises.readFile(path.join(__dirname,'..','public','images',user.profileImage)) ;
@@ -65,6 +85,11 @@ const retrieveProfileImage = async (req,res,next) => {
         const imageBase64 = image.toString('base64'); 
         res.status(200).json({image : imageBase64}) ;
     }
+=======
+    const image = await fsPromises.readFile(path.join(__dirname,'..','public','images',user.profileImage)) ;
+    if(!image) res.sendStatus(204) ;
+    else res.status(200).json({image}) ;
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
     
     }catch(err) {
         next(err) ;
@@ -79,10 +104,14 @@ const updateProfile = async (req,res,next) => {
      if(tunisairId) user.tunisairId = tunisairId ;
      if(fullname) user.fullname = fullname ;
      if(email) user.email = email ;
+<<<<<<< HEAD
      if(password){
         const hashedPassword = await bcrypt.hash(password,10) ;
         user.password = hashedPassword ;
      }
+=======
+     if(password) user.password = password ;
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
     
      await user.save() ; 
      await setValue(`user_${req.connected_id}`,user) ;
@@ -93,6 +122,9 @@ const updateProfile = async (req,res,next) => {
     }
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
 module.exports = {getCurrentUser , uploadProfileImage , retrieveProfileImage , updateProfile} 

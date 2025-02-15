@@ -20,7 +20,10 @@ const getTicketsCountByStatus = async (req,res,next) => {
    try {
     const priority = req.params.priority ;
     const ticketCount = await Ticket.aggregate(adminPipeline.ticketsCountByStatus(priority)) ;
+<<<<<<< HEAD
     
+=======
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
     res.status(200).json({ticketCount}) ;
 
    }catch(err) {
@@ -45,7 +48,11 @@ const getAverageAmountOfTickets = async (req,res,next) => {
     try {
      const averageTicketsCount = await Ticket.aggregate(adminPipeline.averageNumberOfTicketsPerUser()) ;
      res.status(averageTicketsCount ? 200 : 204).json({averageTicketsCount}) ;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
     } catch(err) {
       next(err) ;
     }
@@ -54,6 +61,7 @@ const getAverageAmountOfTickets = async (req,res,next) => {
 const resolveTicket = async (req,res,next) => {
    try {
       const ticketId = req.params.id ;
+<<<<<<< HEAD
       const {solution} = req.body ;
       if(!ticketId || !solution) return res.sendStatus(404) ;
       const ticket = await Ticket.findOne({_id : ticketId }).populate('createdBy').exec() ;
@@ -61,6 +69,12 @@ const resolveTicket = async (req,res,next) => {
       ticket.status = 'resolved';
       ticket.resolvedAt = Date.now() ;
       ticket.solution = solution ;
+=======
+      if(!ticketId) return res.sendStatus(404) ;
+      const ticket = await Ticket.findOne({_id : ticketId }).populate('createdBy').exec() ;
+      if(!ticket) return res.sendStatus(409) ;
+      ticket.status = 'resolved'
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
       await ticket.save() ;
       const admin = await User.findOne({role : 'ADMIN'}).exec() ;
    

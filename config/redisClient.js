@@ -19,7 +19,11 @@ const setValue = async (key,value) => {
 
 const retriveValue = async (key) => {
     const value = await client.get(key) ;
+<<<<<<< HEAD
     return value ? JSON.parse(value) : null;
+=======
+    return JSON.parse(value) ;
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
 }
 
 module.exports = {setValue, retriveValue} ;

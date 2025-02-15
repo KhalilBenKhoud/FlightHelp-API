@@ -40,6 +40,7 @@ const ticketsByUser = (userId,status,priority) => {
 const averageNumberOfTicketsPerUser = () => {
     const pipeline = [
         {
+<<<<<<< HEAD
             $group: {
                 _id: "$createdBy",  
                 ticketCount: { $sum: 1 }  
@@ -53,6 +54,19 @@ const averageNumberOfTicketsPerUser = () => {
         }
     ];
 
+=======
+            $match : {
+                role : 'USER'
+            }
+        },
+        {
+            $group : {
+                _id : "$createdBy",
+                average: { $avg : "$_id" }
+            }
+        }
+    ]
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
     return pipeline ;
 }
 

@@ -36,6 +36,7 @@ const ticketSchema = new Schema({
         type : Date,
         default : Date.now()
     },
+<<<<<<< HEAD
     image : {
         type : String,
         default : ''
@@ -45,6 +46,8 @@ const ticketSchema = new Schema({
         ref : 'Feedback'
     }],
     solution : String,
+=======
+>>>>>>> 518a7d06a59903dfec308f5380d7d44ad6c92f63
     updatedAt : Date,
     resolvedAt : Date
 })
